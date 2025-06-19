@@ -66,3 +66,4 @@ This project is licensed under the [GPLv3 License](./LICENSE).
 - The application is intended to be uploaded to F-Droid in the future.
 - Considering adding iOS functionality to this application in the future.
 - Stay tuned for updates!
+
