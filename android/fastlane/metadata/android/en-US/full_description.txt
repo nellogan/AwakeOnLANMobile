@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Overview</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        h2 { color: #1976d2; }
+    </style>
+</head>
+<body>
+    <h2>Overview</h2>
+    <p>AwakeOnLANMobile enables you to send Wake On LAN (<a href="https://en.wikipedia.org/wiki/Wake-on-LAN">WOL</a>) packets, allowing you to remotely wake up your devices over either a local area network (LAN) or over the internet. It supports IPv4 and IPv6 addresses. The application offers several features:</p>
+    <h2>Features</h2>
+    <ul>
+        <li><strong>Open Source</strong>: Licensed under GPLv3 License with zero advertisements and no account creation necessary.</li>
+        <li><strong>Local Storage</strong>: Add, edit, or delete device information for easy access.</li>
+        <li><strong>Network Scanning</strong>: Discover devices on your LAN or over the internet using either an IPv4 address or CIDR notation for subnets (e.g., 192.168.1.1 or 192.168.1.1/24). Choose between PING and TCP connect (sent to Port 443) packets for scanning. PING will require 1 second per IP address, while TCP connect will be faster.</li>
+        <li><strong>Theme Toggle</strong>: Switch between a light and dark mode theme to customize the appearance based on your preferences. The selected theme will be persisted even after shutting down the application.</li>
+    </ul>
+    <p>Developed with React Native (Typescript) and utilizes C++ turbo modules for native level socket access when sending and receiving packets. The ./cpp directory contains lightly modified code from:</p>
+    <ul>
+        <li><a href="https://github.com/nellogan/awakeonlan">AwakeOnLAN</a></li>
+        <li><a href="https://github.com/nellogan/netscan">NetScan</a></li>
+    </ul>
+    <p>These are Linux commandline utilities that can be used in lieu of this application if your device supports a terminal, such as Termux or the new Android AVF Linux terminal. The file naming scheme differs for NativeModule.cpp and NativeModule.h as this scheme is needed to support React Native's turbo C++ bridging. The other C++ code kept its original file naming scheme since they are from pre-existing repositories.</p>
+</body>
+</html>
