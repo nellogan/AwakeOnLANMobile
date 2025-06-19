@@ -49,7 +49,7 @@ jobs:
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
           RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
         run: |
-          npx react-native build-android --mode=release # this step is needed for code generation of C++ turbo module
+          npx react-native build-android --mode=release # this step is needed for code generation of the C++ turbo module
           cd android && ./gradlew assembleRelease
 
       - name: Create Release

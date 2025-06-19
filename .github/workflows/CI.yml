@@ -1,0 +1,40 @@
+name: CD
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  debug-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Download npm packages
+        run: |
+          npm install
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # Android SDK uses Clang inside cmake by default
+      - name: Install Clang
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang
+
+      - name: Build
+        run: |
+          npx react-native build-android --mode=debug # this step is needed for code generation of the C++ turbo module
+          cd android && ./gradlew assembleDebug
