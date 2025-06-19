@@ -1,4 +1,4 @@
-name: CD
+name: CI
 
 on:
   pull_request:
@@ -28,13 +28,13 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # Android SDK uses Clang inside cmake by default
-      - name: Install Clang
+      # Android SDK uses Clang inside CMake by default
+      - name: Install Clang and CMake
         run: |
           sudo apt-get update
-          sudo apt-get install -y clang
+          sudo apt-get install -y clang cmake
 
       - name: Build
         run: |
-          npx react-native build-android --mode=debug # this step is needed for code generation of the C++ turbo module
+          npx react-native build-android --mode=debug # this step is needed for code generation of the C++ turbo module 
           cd android && ./gradlew assembleDebug

@@ -32,11 +32,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # Android SDK uses Clang inside cmake by default
-      - name: Install Clang
+      # Android SDK uses Clang inside CMake by default
+      - name: Install Clang and CMake
         run: |
           sudo apt-get update
-          sudo apt-get install -y clang
+          sudo apt-get install -y clang cmake
 
       - name: Decode keystore file
         run: |
