@@ -67,3 +67,4 @@ This project is licensed under the [GPLv3 License](./LICENSE).
 - Considering adding iOS functionality to this application in the future.
 - Stay tuned for updates!
 
+
