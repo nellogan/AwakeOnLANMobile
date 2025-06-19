@@ -1,0 +1,105 @@
+name: CD
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write  # Grants write access to repository contents
+
+jobs:
+  build-and-release:
+    environment: production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Download npm packages
+        run: |
+          npm install
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Install GCC
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc
+
+      - name: Decode keystore file
+        run: |
+          echo "${{ secrets.RELEASE_STORE_FILE_BASE64 }}" | base64 -d > release.keystore
+
+      - name: Build the apk files
+        env:
+          KEYSTORE_PATH: ${{ github.workspace }}/release.keystore
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+        run:
+          npx react-native build-android --mode=release # this step is needed for code generation of C++ turbo module
+          cd android && ./gradlew assembleRelease
+
+      - name: Create Release
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag_name="${{ github.ref_name }}"
+          release_name="Release ${tag_name}"
+          body="Automated release for ${tag_name}"
+
+          # The JSON payload is defined using a heredoc, which allows for clean formatting and proper variable expansion. 
+          # The -d @- tells curl to read the data from standard input, which is provided by the heredoc.       
+          response=$(curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/${{ github.repository }}/releases \
+            -d @- <<EOF
+          {
+            "tag_name": "$tag_name",
+            "target_commitish": "master",
+            "name": "$release_name",
+            "body": "$body",
+            "draft": false,
+            "prerelease": false,
+            "generate_release_notes": true
+          }
+          EOF
+          )
+
+          # Extract the value of the top-level "upload_url" key
+          upload_url=$(echo "$response" | grep -o '"upload_url":\s*"[^"{]*' | sed 's/.*"upload_url":\s*"//')
+          echo "upload_url=$upload_url" >> $GITHUB_OUTPUT
+          
+      - name: Upload apk files
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          upload_url=${{ steps.create_release.outputs.upload_url }}
+          for file in ./android/app/build/outputs/apk/release/*.apk; do
+            if [ -f "$file" ]; then
+              filename=$(basename "$file")
+              curl -L \
+                -X POST \
+                -H "Accept: application/vnd.github+json" \
+                -H "Authorization: Bearer $GITHUB_TOKEN" \
+                -H "X-GitHub-Api-Version: 2022-11-28" \
+                -H "Content-Type: application/octet-stream" \
+                "$upload_url?name=$filename" \
+                --data-binary "@$file"
+            fi
+          done
