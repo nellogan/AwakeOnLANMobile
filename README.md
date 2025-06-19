@@ -1,5 +1,14 @@
 # AwakeOnLANMobile
 
+[![CI](https://github.com/nellogan/AwakeOnLANMobile/actions/workflows/CI.yml/badge.svg)](https://github.com/nellogan/AwakeOnLANMobile/actions/workflows/CI.yml)
+[![CD](https://github.com/nellogan/AwakeOnLANMobile/actions/workflows/CD.yml/badge.svg)](https://github.com/nellogan/AwakeOnLANMobile/actions/workflows/CI.yml)
+[![Release Version](https://img.shields.io/github/v/release/nellogan/awakeonlanmobile?sort=semver)](https://github.com/nellogan/AwakeOnLANMobile/releases)
+
+[![Android](https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white)](#)
+[![React Native](https://img.shields.io/badge/React_Native-%2320232a.svg?logo=react&logoColor=%2361DAFB)](#)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff)](#)
+[![C++](https://img.shields.io/badge/C++-%2300599C.svg?logo=c%2B%2B&logoColor=white)](#)
+
 ## Overview
 
 AwakeOnLANMobile enables you to send Wake On LAN ([WOL](https://en.wikipedia.org/wiki/Wake-on-LAN)) packets, allowing you to remotely wake up your devices over either a local area network (LAN) or over the internet. It supports IPv4 and IPv6 addresses. The application offers several features:
@@ -66,5 +75,3 @@ This project is licensed under the [GPLv3 License](./LICENSE).
 - The application is intended to be uploaded to F-Droid in the future.
 - Considering adding iOS functionality to this application in the future.
 - Stay tuned for updates!
-
-
