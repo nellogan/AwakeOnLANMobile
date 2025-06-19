@@ -23,34 +23,39 @@ These are Linux commandline utilities that can be used in lieu of this applicati
 https://github.com/user-attachments/assets/337f5e3e-c89f-4516-93cf-4b8d31d40fab
 
 ## Prerequisites
+
 NOTE: You can directly install the release .apk file if downloaded and opened from android device. You can skip the prerequisites below.
+
 - Properly installed Android Studio: Ensure that you have Android Studio set up correctly on your development machine. This is required for building, testing, and deploying AwakeOnLANMobile to an Android device.
 - Device capable of installing packages from Android Studio: Make sure your Android device supports installing applications directly from Android Studio. If your device has developer options enabled, you can enable USB debugging to allow your computer to install apps on it through a USB connection.
 
 ## Installation
 
 ### Install release .apk file directly on android device
-1. Download the appropriate .apk file for the devices architecture
+
+1. Download the appropriate architecture .apk file from the latest release from this link: [Releases](https://github.com/nellogan/AwakeOnLANMobile/releases)
 2. Tap the .apk file and follow the prompts
 
-### Install release .apk file to computer then use adb to install on android device
-1. Download the appropriate .apk file for the devices architecture
-2. Substitute for architecture and abi: `adb install awakeonlanmobile-${abi}-${variant.versionName}-release.apk`
+### Install release .apk file to your computer then use adb to install on android device
 
+1. Download the appropriate architecture .apk file
+2. Substitute for appropriate abi and architecture: `adb install awakeonlanmobile-${abi}-${variant.versionName}-release.apk`
 
 ### Build from source and install:
+
 1. Clone this repository: `git clone https://github.com/nellogan/awakeonlanmobile.git`
 2. Navigate into the project directory: `cd awakeonlanmobile`
 3. Install dependencies: `npm install` or `yarn install`
 4. Start the Metro Bundler: `npx react-native start` or `yarn react-native start`
 
 For a development build:
+
 5. Open another terminal and run: `npx react-native run-android` or `yarn react-native run-android`
 
 For a release build:
+
 5. Open another terminal and run: `npx react-native build-android --mode=release` or `yarn react-native build-android --mode=release`
 6. (Optional) build the release apk files (you will need to provide the appropriate env vars in ./android/app/build.gradle): `cd android && ./gradlew assembleRelease`
-
 
 ## License
 
