@@ -43,7 +43,7 @@ jobs:
 
       - name: Build the apk files
         env:
-          KEYSTORE_PATH: ${{ github.workspace }}/release.keystore
+          RELEASE_STORE_FILE: ${{ github.workspace }}/release.keystore
           RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
           RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
