@@ -93,10 +93,17 @@ android {
             keyPassword 'android'
         }
         release {
-            storeFile file(System.getenv("RELEASE_STORE_FILE"))
-            storePassword System.getenv("RELEASE_STORE_PASSWORD")
-            keyAlias System.getenv("RELEASE_KEY_ALIAS")
-            keyPassword System.getenv("RELEASE_KEY_PASSWORD")
+            if (gradle.startParameter.taskNames.any { it.contains("Release") }) {
+                // Only configure release signing for release builds
+                if (System.getenv("RELEASE_STORE_FILE")) {
+                    storeFile file(System.getenv("RELEASE_STORE_FILE"))
+                    storePassword System.getenv("RELEASE_STORE_PASSWORD")
+                    keyAlias System.getenv("RELEASE_KEY_ALIAS")
+                    keyPassword System.getenv("RELEASE_KEY_PASSWORD")
+                } else {
+                    throw new GradleException("Release signing configuration is missing environment variables.")
+                }
+            }
         }
     }
     buildTypes {
