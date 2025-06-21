@@ -82,8 +82,8 @@ android {
         applicationId "com.awakeonlanmobile"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0.0"
+        versionCode 100001
+        versionName "1.0.1"
     }
     signingConfigs {
         debug {
@@ -100,8 +100,6 @@ android {
                     storePassword System.getenv("RELEASE_STORE_PASSWORD")
                     keyAlias System.getenv("RELEASE_KEY_ALIAS")
                     keyPassword System.getenv("RELEASE_KEY_PASSWORD")
-                } else {
-                    throw new GradleException("Release signing configuration is missing environment variables.")
                 }
             }
         }
@@ -111,7 +109,6 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
