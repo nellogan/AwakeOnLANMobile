@@ -99,6 +99,19 @@ android {
                 keyAlias System.getenv("RELEASE_KEY_ALIAS")
                 keyPassword System.getenv("RELEASE_KEY_PASSWORD")
             }
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def abi = output.getFilter(com.android.build.OutputFile.ABI)
+                    if (abi != null) {
+                        if (System.getenv("RELEASE_STORE_FILE"))
+                        {
+                            output.outputFileName = "awakeonlanmobile-${abi}-${variant.versionName}.apk"
+                        } else {
+                            output.outputFileName = "awakeonlanmobile-${abi}-${variant.versionName}-unsigned.apk"
+                        }
+                    }
+                }
+            }
         }
     }
     buildTypes {
