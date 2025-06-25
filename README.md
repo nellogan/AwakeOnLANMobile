@@ -63,10 +63,12 @@ NOTE: You can directly install the release .apk file if downloaded and opened wi
 
 #### For a release build (NOTE: .apk files must be signed even if directly installed with `adb install`):
 
-5. Create a keystore: `keytool -genkey -v -keystore /full/path/to/<keystore name>.keystore -alias <alias> -keyalg RSA -keysize 4096 -validity 10000`
+5. Create a keystore: `keytool -genkey -v -keystore /full/path/to/keystorename.keystore -alias alias -keyalg RSA -keysize 4096 -validity 10000`
 6. Source the environment variables:
 
-   source <(echo "export RELEASE_STORE_FILE=/full/path/to/<keystore name>.keystore"; echo "export RELEASE_STORE_PASSWORD=<password>"; echo "export RELEASE_KEY_ALIAS=<alias>"; echo "export RELEASE_KEY_PASSWORD=<password>")
+
+    source <(echo "export RELEASE_STORE_FILE=/full/path/to/keystorename.keystore"; echo "export RELEASE_STORE_PASSWORD=password"; echo "export RELEASE_KEY_ALIAS=alias"; echo "export RELEASE_KEY_PASSWORD=password")
+
 
 7. Build: `npx react-native build-android --mode=release` or `yarn react-native build-android --mode=release`
 8. Assemble .apk files: `cd android && ./gradlew assembleRelease`
