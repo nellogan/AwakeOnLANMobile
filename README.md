@@ -29,7 +29,7 @@ These are Linux commandline utilities that can be used in lieu of this applicati
 
 ## Demo Video
 
-https://github.com/user-attachments/assets/337f5e3e-c89f-4516-93cf-4b8d31d40fab
+[awakeonlanmobile_demo.webm](https://github.com/user-attachments/assets/04d7949e-2e7e-445c-bb2a-33e31e8d2d00)
 
 ## Prerequisites
 
