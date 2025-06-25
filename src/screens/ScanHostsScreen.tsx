@@ -9,6 +9,7 @@ import {
   StyleSheet,
   ViewStyle,
   TextStyle,
+  Keyboard,
 } from 'react-native';
 import { CustomButton } from '../components/CustomButton';
 import { CustomRadioButton } from '../components/CustomRadioButton';
@@ -220,6 +221,12 @@ const useDynamicStyles = (): Styles => {
       marginTop: 20,
       marginBottom: 10,
     },
+    noResults: {
+      fontSize: fonts.mediumFontSize,
+      color: colors.text,
+      textAlign: 'center' as const,
+      marginTop: 20,
+    },
   });
 };
 
@@ -234,6 +241,7 @@ export const ScanHostsScreen = () => {
   const styles = useDynamicStyles();
 
   const handleScanButtonPress = async (): Promise<void> => {
+    Keyboard.dismiss(); // Close the keyboard
     if (!inputValue.trim()) {
       setError('Enter a valid IP Address');
       return;
@@ -242,7 +250,7 @@ export const ScanHostsScreen = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const results: Promise<string[][]> = await NativeModule.ScanHosts(
+      const results: string[][] = await NativeModule.ScanHosts(
         inputValue,
         selectedOption,
       );

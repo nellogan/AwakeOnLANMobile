@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   KeyboardAvoidingView,
   ScrollView,
@@ -8,8 +8,8 @@ import {
   Platform,
   Keyboard,
   StyleSheet,
-  Dimensions,
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { DeviceType } from '../types/device';
 import { CustomButton } from '../components/CustomButton';
 import { fonts, getColors, Colors, dynamicBaseStyles } from '../styles/base';
@@ -24,18 +24,21 @@ const dynamicDeviceFormStyles = () => {
     title: baseStyles.title,
     buttonText: baseStyles.buttonText,
     outerContainer: {
-      justifyContent: 'center', // Center ScrollView vertically
+      flex: 1,
       borderRadius: 8,
-      backgroundColor: colors.background, // Move background here
+      backgroundColor: colors.background,
       width: '100%',
     },
     scrollContainer: {
-      justifyContent: 'center', // Center content vertically
-      alignItems: 'center', // Center content horizontally
+      flexGrow: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingBottom: 20,
     },
     formContainer: {
       padding: 15,
       width: '100%',
+      maxWidth: 600, // Limit width on larger screens
     },
     label: {
       fontSize: fonts.mediumFontSize,
@@ -91,7 +94,15 @@ export const DeviceForm = ({
   const [port, setPort] = useState<string>(initialDevice?.port || '');
   const [passwd, setPasswd] = useState<string>(initialDevice?.passwd || '');
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const scrollViewRef = useRef<ScrollView>(null);
   const styles = dynamicDeviceFormStyles();
+
+  // Reset scroll position when screen is focused
+  useFocusEffect(
+    React.useCallback(() => {
+      scrollViewRef.current?.scrollTo({ y: 0, animated: false });
+    }, []),
+  );
 
   // Listen for keyboard show/hide events
   useEffect(() => {
@@ -175,6 +186,13 @@ export const DeviceForm = ({
     }
   };
 
+  const handleIpAddrInput = (text: string) => {
+    setIpAddr(text);
+    if (text.trim() === '') {
+      setIpAddrError(null);
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -182,13 +200,13 @@ export const DeviceForm = ({
       style={styles.outerContainer}
     >
       <ScrollView
+        ref={scrollViewRef}
         contentContainerStyle={[
           styles.scrollContainer,
-          { paddingBottom: keyboardHeight },
+          { paddingBottom: Math.max(keyboardHeight, 20) }, // Ensure enough padding for keyboard or content
         ]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={true}
-        scrollEnabled={keyboardHeight > 0} // Enable scrolling only when keyboard is active
       >
         <View style={styles.formContainer}>
           {title && <Text style={styles.title}>{title}</Text>}
@@ -215,7 +233,7 @@ export const DeviceForm = ({
             style={[styles.input, ipAddrError && styles.errorInput]}
             placeholderTextColor={styles.input.placeholderTextColor}
             value={ipAddr}
-            onChangeText={setIpAddr}
+            onChangeText={handleIpAddrInput}
             maxLength={40}
             placeholder="Enter IPv4 or IPv6 Address"
           />

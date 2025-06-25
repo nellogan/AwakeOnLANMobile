@@ -59,12 +59,26 @@ NOTE: You can directly install the release .apk file if downloaded and opened fr
 
 For a development build:
 
+4. In a terinmal run: `npx react-native start`
 5. Open another terminal and run: `npx react-native run-android` or `yarn react-native run-android`
 
 For a release build:
-
+NOTE: apk files must be signed even if directly installed with `adb install`
 5. Open another terminal and run: `npx react-native build-android --mode=release` or `yarn react-native build-android --mode=release`
-6. (Optional) build the release apk files (you will need to provide the appropriate env vars in ./android/app/build.gradle): `cd android && ./gradlew assembleRelease`
+6. Create keystore: `keytool -genkey -v -keystore /path/to/<keystore name>.keystore -alias alias_name -keyalg RSA -keysize 4096 -validity 10000`
+8. Set all needed environment variables by choosing all values in <> brackets, note <your password> is repeated:
+
+   export RELEASE_STORE_FILE=/path/to/<keystore name>.keystore
+   export RELEASE_STORE_PASSWORD=<your password>
+   export RELEASE_KEY_ALIAS=<your alias>
+   export RELEASE_KEY_PASSWORD=<your password>
+
+   export RELEASE_STORE_FILE=../trash/secret.keystore
+   export RELEASE_STORE_PASSWORD=aaaaaa
+   export RELEASE_KEY_ALIAS=secret
+   export RELEASE_KEY_PASSWORD=aaaaaa
+
+9. Build the release apk files (you will need to provide the appropriate env vars in ./android/app/build.gradle): `cd android && ./gradlew assembleRelease` then `adb install app/build/outputs/apk/release/awakeonlanmobile-${abi}-${variant.versionName}-unsigned.apk`
 
 ## License
 
