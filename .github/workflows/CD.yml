@@ -6,7 +6,7 @@ on:
       - 'v*'
 
 permissions:
-  contents: write  # Grants write access to repository contents
+  contents: write
 
 jobs:
   build-and-release:
@@ -22,21 +22,14 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Install OpenJDK 17
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openjdk-17-jdk
+
       - name: Download npm packages
         run: |
           npm install
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      # Android SDK uses Clang inside CMake by default
-      - name: Install Clang and CMake
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y clang cmake
 
       - name: Decode keystore file
         run: |
@@ -49,8 +42,10 @@ jobs:
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
           RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
         run: |
-          npx react-native build-android --mode=release # this step is needed for code generation of the C++ turbo module
-          cd android && ./gradlew assembleRelease
+          cd android
+          ./gradlew generateCodegenArtifactsFromSchema
+          bash ./repro_build_patch.sh
+          ./gradlew assembleRelease
 
       - name: Create Release
         id: create_release
@@ -85,7 +80,7 @@ jobs:
           # Extract the value of the top-level "upload_url" key
           upload_url=$(echo "$response" | grep -o '"upload_url":\s*"[^"{]*' | sed 's/.*"upload_url":\s*"//')
           echo "upload_url=$upload_url" >> $GITHUB_OUTPUT
-          
+
       - name: Upload apk files
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
