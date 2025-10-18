@@ -42,7 +42,7 @@ NOTE: You can directly install the release .apk file if downloaded and opened wi
 
 ### Install release .apk file directly on android device
 
-1. Download the appropriate architecture .apk file from the latest release from this link: [Releases](https://github.com/nellogan/AwakeOnLANMobile/releases)
+1. Download the appropriate architecture .apk file from the latest release from this link: [Releases](https://github.com/nellogan/AwakeOnLANMobile/releases) or from [F-Droid](https://f-droid.org/packages/com.awakeonlanmobile/)
 2. Tap the .apk file and follow the prompts
 
 ### Install release .apk file to your computer then use adb to install on android device
